@@ -68,10 +68,24 @@ d3.json(queryUrl).then(function(response) {
                 radius: magnitude * 10
             }).bindPopup("<h3>" + place + "</h3><hr><p>" + date + 
             '<br>' + "Coordinates: " + '[' + coordinates[1] + ', ' + coordinates[0] + ']' +
-            '<br>' + "Magnitude: " + magnitude + "</p>").addTo(myMap);
+            '<br>' + "Magnitude: " + magnitude + "</p>").addTo(myMap);            
           };
-
-        
-
     });
 
+//add legend
+var legend = L.control({ position: "bottomright" });
+
+legend.onAdd = function() {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Depth in km</h4>";
+  div.innerHTML += '<li style="background: lime">-10-10</li><br>';
+  div.innerHTML += '<li style="background: palegreen">10-30</li><br>';
+  div.innerHTML += '<li style="background: gold">30-50</li><br>';
+  div.innerHTML += '<li style="background: orange">50-70</li><br>';
+  div.innerHTML += '<li style="background: darkorange">70-90</li><br>';
+  div.innerHTML += '<li style="background: red">90+</li><br>';
+
+  return div;
+};
+
+legend.addTo(myMap);
