@@ -15,7 +15,7 @@ var myMap = L.map("map", {
   }).addTo(myMap);
 
 //query url
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
 
 //grab data with d3
 d3.json(queryUrl).then(function(response) {
@@ -23,14 +23,55 @@ d3.json(queryUrl).then(function(response) {
     console.log(response)
 
     //get features data
-    var features = response.features;
+    var response = response.features;
 
-	for (var i = 0; i < features.length; i++) {
+	for (var i = 0; i < response.length; i++) {
 		
-		//get magnitude and coordinates of earthquakes
-		var magnitude = features[i].properties.mag;
-		var coordinates = features[i].geometry.coordinates;
+		//set variables for future use
+        var place = response[i].properties.place;
+        var date = new Date(response[i].properties.time);
+		var magnitude = response[i].properties.mag;
+		var coordinates = response[i].geometry.coordinates;
+        var depth = response[i].geometry.coordinates[2];
+            console.log(place)
+            console.log(depth)
+            console.log(magnitude)
+            console.log(coordinates)
 
-    }
+        //create color gradient for depths
+            var color = "";
+            if (depth >-10 && depth <=10) {
+              color =  "lime";
+            }
+            else if (depth >10 && depth <=30) {
+              color = "palegreen";
+            }
+            else if (depth >30 && depth <=50) {
+              color = "gold";
+            }
+            else if (depth >50 && depth <=70) {
+              color = "orange";
+            }
+            else if (depth >70 && depth <=90) {
+              return "darkorange";
+            }
+            else {
+              return "red";
+            }
 
-})
+
+            L.circleMarker([coordinates[1], coordinates[0]], {
+                fillOpacity: 0.75,
+                color: "black",
+                weight: 0.5,
+                fillColor: color,
+                radius: magnitude * 10
+            }).bindPopup("<h3>" + place + "</h3><hr><p>" + date + 
+            '<br>' + "Coordinates: " + '[' + coordinates[1] + ', ' + coordinates[0] + ']' +
+            '<br>' + "Magnitude: " + magnitude + "</p>").addTo(myMap);
+          };
+
+        
+
+    });
+
