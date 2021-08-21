@@ -30,8 +30,8 @@ d3.json(queryUrl).then(function(response) {
 		//set variables for future use
         var place = response[i].properties.place;
         var date = new Date(response[i].properties.time);
-		var magnitude = response[i].properties.mag;
-		var coordinates = response[i].geometry.coordinates;
+		    var magnitude = response[i].properties.mag;
+		    var coordinates = response[i].geometry.coordinates;
         var depth = response[i].geometry.coordinates[2];
             console.log(place)
             console.log(depth)
